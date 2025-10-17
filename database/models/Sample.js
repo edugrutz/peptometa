@@ -13,13 +13,9 @@ const Sample = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
-        sra_acession: {
+        sra_accession: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true
         }
     }
 );

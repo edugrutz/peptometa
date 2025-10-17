@@ -9,7 +9,7 @@ import TaxonomyAssignment from './models/TaxonomyAssignment.js';
 
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ force: true });
     console.log('✅ All models were synchronized successfully.');
   } catch (error) {
     console.error('❌ Error synchronizing models:', error);
