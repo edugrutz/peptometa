@@ -1,5 +1,25 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Supabase setup
+
+1. Crie um projeto no [Supabase](https://supabase.com/) e uma tabela `peptides` com, no mínimo, as colunas abaixo:
+   - `id` (uuid, primary key, default value `uuid_generate_v4()`)
+   - `name`, `sequence`, `mechanism`, `origin`, `status` (todas `text`)
+2. Na raiz do projeto, crie um arquivo `.env.local` com as credenciais do projeto:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL="https://<sua-instancia>.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon-key>"
+```
+
+3. Reinicie o servidor de desenvolvimento após alterar variáveis de ambiente:
+
+```bash
+npm run dev
+```
+
+O componente em `src/app/page.tsx` já consome diretamente a tabela `peptides`. Qualquer mudança na tabela aparecerá no painel ao recarregar a página.
+
 ## Getting Started
 
 First, run the development server:
