@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import type { Peptide } from "../types/peptide";
 
 type Props = {
@@ -14,10 +15,6 @@ export default function PeptideTable({ peptides, hasError }: Props) {
   const [query, setQuery] = useState("");
   const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query, pageSize]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return peptides;
@@ -51,7 +48,10 @@ export default function PeptideTable({ peptides, hasError }: Props) {
                 Mostrar
                 <select
                   value={pageSize}
-                  onChange={(event) => setPageSize(Number(event.target.value))}
+                  onChange={(event) => {
+                    setPageSize(Number(event.target.value));
+                    setPage(1);
+                  }}
                   className="rounded-xl border border-slate-200 px-3 py-1 text-sm text-slate-700 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
                 >
                   {pageSizeOptions.map((size) => (
@@ -66,7 +66,10 @@ export default function PeptideTable({ peptides, hasError }: Props) {
                 type="search"
                 placeholder="Buscar por nome, ID ou SRA"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setPage(1);
+                }}
                 className="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 sm:w-64"
               />
             </div>
@@ -108,8 +111,14 @@ export default function PeptideTable({ peptides, hasError }: Props) {
               currentItems.map((peptide) => (
                 <tr key={peptide.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-medium sm:px-8">{peptide.id}</td>
-                  <td className="px-6 py-4 font-medium sm:px-8">
-                    {peptide.name}
+                  <td className="px-6 py-4 font-medium text-emerald-700 sm:px-8">
+                    <Link
+                      href={`/peptides/${peptide.id}`}
+                      title={peptide.name}
+                      className="block max-w-[14rem] overflow-hidden text-left text-emerald-700 text-ellipsis whitespace-nowrap transition hover:text-emerald-600 hover:underline focus-visible:text-emerald-600 focus-visible:underline sm:max-w-[20rem]"
+                    >
+                      {peptide.name}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 font-mono text-xs text-slate-600 sm:px-8">
                     {peptide.sra_accession}
