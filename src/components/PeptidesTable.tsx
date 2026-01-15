@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
 type Peptide = {
-    id: number;
-    sample_id: string;
+    id: string;
     sequence: string;
-    length: number;
-    peptide_class: string;
+    amp_family: string;
+    amp_score: number;
+    anticp_score: number;
+    hemo_score: number;
 }
 
 export function PeptidesTable() {
@@ -47,20 +48,20 @@ export function PeptidesTable() {
                 <thead>
                     <tr>
                         <th className="border border-gray-300 px-4 py-2">ID</th>
-                        <th className="border border-gray-300 px-4 py-2">Sample ID</th>
                         <th className="border border-gray-300 px-4 py-2">Sequence</th>
-                        <th className="border border-gray-300 px-4 py-2">Length</th>
-                        <th className="border border-gray-300 px-4 py-2">Class</th>
+                        <th className="border border-gray-300 px-4 py-2">AMP Score (family)</th>
+                        <th className="border border-gray-300 px-4 py-2">AntiCP Score</th>
+                        <th className="border border-gray-300 px-4 py-2">Hemo Score</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((peptide) => (
                         <tr key={peptide.id}>
                             <td className="border border-gray-300 px-4 py-2">{peptide.id}</td>
-                            <td className="border border-gray-300 px-4 py-2">{peptide.sample_id}</td>
                             <td className="border border-gray-300 px-4 py-2">{peptide.sequence}</td>
-                            <td className="border border-gray-300 px-4 py-2">{peptide.length}</td>
-                            <td className="border border-gray-300 px-4 py-2">{peptide.peptide_class}</td>
+                            <td className="border border-gray-300 px-4 py-2">{peptide.amp_score} {peptide.amp_family ? `(${peptide.amp_family})` : ""}</td>
+                            <td className="border border-gray-300 px-4 py-2">{peptide.anticp_score}</td>
+                            <td className="border border-gray-300 px-4 py-2">{peptide.hemo_score}</td>
                         </tr>
                     ))}
                 </tbody>
