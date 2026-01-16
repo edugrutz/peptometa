@@ -1,4 +1,4 @@
-import { PeptidesTable } from "@/components/PeptidesTable";
+import { AntiCPPeptidesTable } from "@/components/PeptidesTables/AntiCPTable";
 
 export default async function Home() {
 
@@ -7,8 +7,8 @@ export default async function Home() {
       <div className="px-12 py-12">
         <h1 className="text-4xl font-bold mb-4">PeptoMeta</h1>
         <p className="text-lg">Plataforma para visualização de peptídeos extraídos a partir da pipeline PeptoMiner</p>
-      </div>      
-      <PeptidesTable />
-    </main>    
+      </div>
+      <AntiCPPeptidesTable />
+    </main>
   );
 }
