@@ -4,7 +4,7 @@ import { TableProps } from "./types";
 
 export function Table<T>({ data, columns, keyField }: TableProps<T>) {
   return (
-    <div className="px-4 md:px-8 lg:px-12 overflow-x-auto">
+    <div className="overflow-x-auto">
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>
           <tr>
