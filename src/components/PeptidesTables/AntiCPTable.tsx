@@ -1,15 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Table } from "@/components/Table";
-import { Column } from "@/components/Table/types";
+import { Column, SortDirection } from "@/components/Table/types";
 import { getPeptidesAntiCP } from "@/services/peptides";
 import { IPeptideAntiCP } from "@/types/peptide";
 
 export function AntiCPPeptidesTable() {
+
+  const [sortBy, setSortBy] = useState<string>("score");
+  const [sortDir, setSortDir] = useState<SortDirection>("desc");
+
   const { data = [], isLoading, error } = useQuery({
-    queryKey: ["anticp"],
-    queryFn: getPeptidesAntiCP,
+    queryKey: ["anticp", sortBy, sortDir],
+    queryFn: () => getPeptidesAntiCP(sortBy, sortDir),
   });
 
   if (isLoading) return <p>Loading peptides...</p>;
@@ -21,5 +26,16 @@ export function AntiCPPeptidesTable() {
     { key: "score", header: "AntiCP Score" },
   ];
 
-  return <Table data={data} columns={columns} keyField="sequence_id" />;
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      keyField="sequence_id"
+      sort={{ column: sortBy, direction: sortDir }}
+      onSortChange={(col, dir) => {
+        setSortBy(col);
+        setSortDir(dir);
+      }}
+    />
+  );
 }

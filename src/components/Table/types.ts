@@ -10,4 +10,13 @@ export type TableProps<T> = {
   data: T[];
   columns: Column<T>[];
   keyField: keyof T;
+  sort?: SortState;
+  onSortChange?: (column:string, direction: SortDirection) => void;
+};
+
+export type SortDirection = "asc" | "desc";
+
+export type SortState = {
+  column: string | null;
+  direction: SortDirection;
 };

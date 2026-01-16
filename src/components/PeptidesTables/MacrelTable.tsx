@@ -1,15 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Table } from "@/components/Table";
-import { Column } from "@/components/Table/types";
+import { Column, SortDirection } from "@/components/Table/types";
 import { getPeptidesMacrel } from "@/services/peptides";
 import { IPeptideMacrel } from "@/types/peptide";
 
 export function MacrelPeptidesTable() {
+
+  const [sortBy, setSortBy] = useState<string>("amp_probability");
+  const [sortDir, setSortDir] = useState<SortDirection>("desc");
+
   const { data = [], isLoading, error } = useQuery({
-    queryKey: ["macrel"],
-    queryFn: getPeptidesMacrel,
+    queryKey: ["macrel", sortBy, sortDir],
+    queryFn: () => getPeptidesMacrel(sortBy, sortDir),
   });
 
   if (isLoading) return <p>Loading peptides...</p>;
@@ -23,5 +28,16 @@ export function MacrelPeptidesTable() {
     { key: "hemolytic_probability", header: "Hemolytic Probability" },
   ];
 
-  return <Table data={data} columns={columns} keyField="sequence_id" />;
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      keyField="sequence_id"
+      sort={{ column: sortBy, direction: sortDir }}
+      onSortChange={(col, dir) => {
+        setSortBy(col);
+        setSortDir(dir);
+      }}
+    />
+  );
 }
