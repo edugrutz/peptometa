@@ -1,4 +1,4 @@
-import { PeptidesTabs } from "@/components/PeptidesTabs";
+import { PeptidesTabs } from "@/app/(home)/PeptidesTabs";
 
 export default async function Home() {
 
