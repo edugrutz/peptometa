@@ -15,6 +15,8 @@ export type TableProps<T> = {
   currentPage?: number;
   onPageChange?: (newPage: number) => void;
   totalPages?: number;
+  itemsPerPage?: number;
+  onItemsPerPageChange?: (newItemsPerPage: number) => void;
 };
 
 export type SortDirection = "asc" | "desc";

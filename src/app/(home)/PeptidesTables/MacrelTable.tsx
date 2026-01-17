@@ -12,14 +12,14 @@ export function MacrelPeptidesTable() {
   const [sortBy, setSortBy] = useState<string>("amp_probability");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [page, setPage] = useState<number>(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 
   // Range
   const from = (page - 1) * itemsPerPage;
   const to = page * itemsPerPage - 1;
 
   const { data: result, isLoading, error } = useQuery({
-    queryKey: ["macrel", sortBy, sortDir, page],
+    queryKey: ["macrel", sortBy, sortDir, page, itemsPerPage],
     queryFn: () => getPeptidesMacrel(sortBy, sortDir, from, to),
   });
 
@@ -42,6 +42,8 @@ export function MacrelPeptidesTable() {
       keyField="sequence_id"
       onPageChange={(newPage) => setPage(newPage)}
       currentPage={page}
+      itemsPerPage={itemsPerPage}
+      onItemsPerPageChange={(newItemsPerPage) => setItemsPerPage(newItemsPerPage)}
       sort={{ column: sortBy, direction: sortDir }}
       onSortChange={(col, dir) => {
         setSortBy(col);

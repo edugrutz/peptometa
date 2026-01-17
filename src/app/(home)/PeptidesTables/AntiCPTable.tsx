@@ -12,14 +12,14 @@ export function AntiCPPeptidesTable() {
   const [sortBy, setSortBy] = useState<string>("score");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [page, setPage] = useState<number>(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 
   // Range
   const from = (page - 1) * itemsPerPage;
   const to = page * itemsPerPage - 1;
 
   const { data: result, isLoading, error} = useQuery({
-    queryKey: ["anticp", sortBy, sortDir, page],
+    queryKey: ["anticp", sortBy, sortDir, page, itemsPerPage],
     queryFn: () => getPeptidesAntiCP(sortBy, sortDir, from, to),
   });
 
@@ -40,6 +40,8 @@ export function AntiCPPeptidesTable() {
       keyField="sequence_id"
       onPageChange={(newPage) => setPage(newPage)}
       currentPage={page}
+      itemsPerPage={itemsPerPage}
+      onItemsPerPageChange={(newItemsPerPage) => setItemsPerPage(newItemsPerPage)}
       sort={{ column: sortBy, direction: sortDir }}
       onSortChange={(col, dir) => {
         setSortBy(col);

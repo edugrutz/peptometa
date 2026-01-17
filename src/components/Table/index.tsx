@@ -3,7 +3,18 @@
 import { TableProps, SortDirection } from "./types";
 import {ArrowDownUp, ArrowDown, ArrowUp} from "lucide-react";
 
-export function Table<T>({ data, columns, keyField, sort, onSortChange, currentPage, onPageChange, totalPages }: TableProps<T>) {
+export function Table<T>({ 
+  data, 
+  columns, 
+  keyField, 
+  sort, 
+  onSortChange, 
+  currentPage, 
+  onPageChange, 
+  totalPages, 
+  itemsPerPage,
+  onItemsPerPageChange 
+}: TableProps<T>) {
 
   const page = currentPage ?? 1;
 
@@ -34,6 +45,19 @@ export function Table<T>({ data, columns, keyField, sort, onSortChange, currentP
   return (
     <div className="overflow-x-auto flex flex-col gap-2">
       <div className="flex justify-end gap-2">
+        <select 
+          className="border border-gray-300 px-4 py-2" 
+          value={itemsPerPage}
+          onChange={(e) => {
+            const newValue = Number(e.target.value);
+            onItemsPerPageChange?.(newValue);
+            onPageChange?.(1);
+          }}
+        >
+          <option value="10">10</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
+        </select>
         <button 
           className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" 
           onClick={handlePreviousPage}
@@ -41,7 +65,7 @@ export function Table<T>({ data, columns, keyField, sort, onSortChange, currentP
         >
           Previous
         </button>
-        <span className="px-4 py-2 flex items-center">Page {page}</span>
+        <span className="px-4 py-2 flex items-center">Page {page} of {totalPages}</span>
         <button 
           className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleNextPage}
