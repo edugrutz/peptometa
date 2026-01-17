@@ -3,7 +3,9 @@
 import { TableProps, SortDirection } from "./types";
 import {ArrowDownUp, ArrowDown, ArrowUp} from "lucide-react";
 
-export function Table<T>({ data, columns, keyField, sort, onSortChange }: TableProps<T>) {
+export function Table<T>({ data, columns, keyField, sort, onSortChange, currentPage, onPageChange, totalPages }: TableProps<T>) {
+
+  const page = currentPage ?? 1;
 
   function handleSort(column: string) {
     if (!onSortChange) return;
@@ -14,10 +16,40 @@ export function Table<T>({ data, columns, keyField, sort, onSortChange }: TableP
     } else {
       onSortChange(column, "desc");
     }
+    onPageChange?.(1);
+  }
+
+  function handlePreviousPage() {
+    if (onPageChange && page > 1) {
+      onPageChange(page - 1);
+    }
+  }
+
+  function handleNextPage() {
+    if (onPageChange && (!totalPages || page < totalPages)) {
+      onPageChange(page + 1);
+    }
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto flex flex-col gap-2">
+      <div className="flex justify-end gap-2">
+        <button 
+          className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" 
+          onClick={handlePreviousPage}
+          disabled={page <= 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2 flex items-center">Page {page}</span>
+        <button 
+          className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handleNextPage}
+          disabled={totalPages !== undefined && page >= totalPages}
+        >
+          Next
+        </button>
+      </div>
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>
           <tr>

@@ -12,6 +12,9 @@ export type TableProps<T> = {
   keyField: keyof T;
   sort?: SortState;
   onSortChange?: (column:string, direction: SortDirection) => void;
+  currentPage?: number;
+  onPageChange?: (newPage: number) => void;
+  totalPages?: number;
 };
 
 export type SortDirection = "asc" | "desc";
