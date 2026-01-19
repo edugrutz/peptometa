@@ -13,7 +13,9 @@ export function Table<T>({
   onPageChange, 
   totalPages, 
   itemsPerPage,
-  onItemsPerPageChange 
+  onItemsPerPageChange,
+  searchTerm,
+  onSearchChange 
 }: TableProps<T>) {
 
   const page = currentPage ?? 1;
@@ -44,35 +46,49 @@ export function Table<T>({
 
   return (
     <div className="overflow-x-auto flex flex-col gap-2">
-      <div className="flex justify-end gap-2">
-        <select 
-          className="border border-gray-300 px-4 py-2" 
-          value={itemsPerPage}
-          onChange={(e) => {
-            const newValue = Number(e.target.value);
-            onItemsPerPageChange?.(newValue);
-            onPageChange?.(1);
-          }}
-        >
-          <option value="10">10</option>
-          <option value="30">30</option>
-          <option value="50">50</option>
-        </select>
-        <button 
-          className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" 
-          onClick={handlePreviousPage}
-          disabled={page <= 1}
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2 flex items-center">Page {page} of {totalPages}</span>
-        <button 
-          className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleNextPage}
-          disabled={totalPages !== undefined && page >= totalPages}
-        >
-          Next
-        </button>
+      <div className="flex justify-between items-center gap-2">
+        <div className="flex-1 max-w-sm">
+          <input
+            type="text"
+            className="w-full border border-gray-300 px-4 py-2"
+            placeholder="Search peptides..."
+            value={searchTerm ?? ""}
+            onChange={(e) => {
+              onSearchChange?.(e.target.value);
+              onPageChange?.(1);
+            }}
+          />
+        </div>
+        <div className="flex gap-2">
+          <select 
+            className="border border-gray-300 px-4 py-2" 
+            value={itemsPerPage}
+            onChange={(e) => {
+              const newValue = Number(e.target.value);
+              onItemsPerPageChange?.(newValue);
+              onPageChange?.(1);
+            }}
+          >
+            <option value="10">10</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+          </select>
+          <button 
+            className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" 
+            onClick={handlePreviousPage}
+            disabled={page <= 1}
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 flex items-center">Page {page} of {totalPages}</span>
+          <button 
+            className="px-4 py-2 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleNextPage}
+            disabled={totalPages !== undefined && page >= totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>

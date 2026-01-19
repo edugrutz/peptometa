@@ -10,10 +10,17 @@ export async function getPeptidesAntiCP(
   sortDir: SortDirection,
   from: number,
   to: number,
+  search?: string
 ): Promise<PaginationResult<IPeptideAntiCP>> {
-  const { data, error, count } = await supabase
+  let query = supabase
     .from("anticp")
-    .select("*", {count: "exact"})
+    .select("*", {count: "exact"});
+
+  if (search) {
+    query = query.ilike('sequence', `%${search}%`);
+  }
+
+  const { data, error, count } = await query
     .order(sortBy, { ascending: sortDir === "asc" })
     .range(from, to);
 
@@ -26,10 +33,17 @@ export async function getPeptidesMacrel(
   sortDir: SortDirection,
   from: number,
   to: number,
+  search?: string
 ): Promise<PaginationResult<IPeptideMacrel>> {
-  const { data, error, count } = await supabase
+  let query = supabase
     .from("macrel")
-    .select("*", { count: "exact" })
+    .select("*", { count: "exact" });
+
+  if (search) {
+    query = query.ilike('sequence', `%${search}%`);
+  }
+
+  const { data, error, count } = await query
     .order(sortBy, { ascending: sortDir === "asc" })
     .range(from, to);
 

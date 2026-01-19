@@ -6,6 +6,7 @@ import { Table } from "@/components/Table";
 import { Column, SortDirection } from "@/components/Table/types";
 import { getPeptidesAntiCP } from "@/services/peptides";
 import { IPeptideAntiCP } from "@/types/peptide";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export function AntiCPPeptidesTable() {
 
@@ -13,14 +14,16 @@ export function AntiCPPeptidesTable() {
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [page, setPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const debouncedSearch = useDebounce(search, 500);
 
   // Range
   const from = (page - 1) * itemsPerPage;
   const to = page * itemsPerPage - 1;
 
   const { data: result, isLoading, error} = useQuery({
-    queryKey: ["anticp", sortBy, sortDir, page, itemsPerPage],
-    queryFn: () => getPeptidesAntiCP(sortBy, sortDir, from, to),
+    queryKey: ["anticp", sortBy, sortDir, page, itemsPerPage, debouncedSearch],
+    queryFn: () => getPeptidesAntiCP(sortBy, sortDir, from, to, debouncedSearch),
   });
 
   if (isLoading) return <p>Loading peptides...</p>;
@@ -42,6 +45,8 @@ export function AntiCPPeptidesTable() {
       currentPage={page}
       itemsPerPage={itemsPerPage}
       onItemsPerPageChange={(newItemsPerPage) => setItemsPerPage(newItemsPerPage)}
+      searchTerm={search}
+      onSearchChange={(newSearch) => setSearch(newSearch)}
       sort={{ column: sortBy, direction: sortDir }}
       onSortChange={(col, dir) => {
         setSortBy(col);
