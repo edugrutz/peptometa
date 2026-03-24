@@ -19,6 +19,7 @@ export type TableProps<T> = {
   onItemsPerPageChange?: (newItemsPerPage: number) => void;
   searchTerm?: string;
   onSearchChange?: (newSearchTerm: string) => void;
+  onRowClick?: (row: T) => void;
 };
 
 export type SortDirection = "asc" | "desc";

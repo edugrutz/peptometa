@@ -9,14 +9,37 @@ export function PeptidesTabs() {
   const [activeTab, setActiveTab] = useState<string>("anticp");
 
   return (
-    <div className="px-4 md:px-8 lg:px-12 flex flex-col gap-4">
-      <div className="flex gap-2">
-        <button className="bg-gray-600 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded border" onClick={() => setActiveTab("anticp")}>AntiCP Peptides</button>
-        <button className="bg-gray-600 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded border" onClick={() => setActiveTab("macrel")}>Macrel Peptides</button>
+    <div className="flex flex-col gap-4">
+      {/* Tabs */}
+      <div className="inline-flex rounded-lg border border-slate-200 bg-white p-1.5 w-fit shadow-sm">
+        <button
+          onClick={() => setActiveTab("anticp")}
+          className={`px-6 py-2.5 rounded-md font-semibold text-sm transition-all duration-200 ${
+            activeTab === "anticp"
+              ? "bg-slate-600 text-white shadow-md"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          AntiCP Peptides
+        </button>
+        <button
+          onClick={() => setActiveTab("macrel")}
+          className={`px-6 py-2.5 rounded-md font-semibold text-sm transition-all duration-200 ${
+            activeTab === "macrel"
+              ? "bg-slate-600 text-white shadow-md"
+              : "text-slate-600 hover:text-slate-900"
+          }`}
+        >
+          Macrel Peptides
+        </button>
       </div>
-      <div>
-        {activeTab === "anticp" && <AntiCPPeptidesTable />}
-        {activeTab === "macrel" && <MacrelPeptidesTable />}
+
+      {/* Content */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+        <div className="p-6">
+          {activeTab === "anticp" && <AntiCPPeptidesTable />}
+          {activeTab === "macrel" && <MacrelPeptidesTable />}
+        </div>
       </div>
     </div>
   );
